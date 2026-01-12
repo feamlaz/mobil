@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Icons</title>
+</head>
+<body>
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Градиент фон
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#1e3c72');
+            gradient.addColorStop(0.5, '#3498db');
+            gradient.addColorStop(1, '#16a085');
+            
+            // Фон с закругленными углами
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, size * 0.2);
+            ctx.fill();
+            
+            // Белый прямоугольник для задачи
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            const taskWidth = size * 0.5;
+            const taskHeight = size * 0.25;
+            const taskX = (size - taskWidth) / 2;
+            const taskY = (size - taskHeight) / 2;
+            ctx.beginPath();
+            ctx.roundRect(taskX, taskY, taskWidth, taskHeight, size * 0.05);
+            ctx.fill();
+            
+            // Галочка
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size * 0.03;
+            ctx.beginPath();
+            const checkX = taskX + taskWidth * 0.2;
+            const checkY = taskY + taskHeight * 0.5;
+            ctx.moveTo(checkX, checkY);
+            ctx.lineTo(checkX + taskWidth * 0.15, checkY + taskHeight * 0.15);
+            ctx.lineTo(checkX + taskWidth * 0.35, checkY - taskHeight * 0.1);
+            ctx.stroke();
+            
+            // Сохраняем как PNG
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = canvasId.replace('canvas', 'icon-') + '.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        // Создаем иконки
+        setTimeout(() => {
+            createIcon('canvas192', 192);
+            createIcon('canvas512', 512);
+        }, 100);
+    </script>
+</body>
+</html>

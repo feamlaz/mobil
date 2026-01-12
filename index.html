@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Smurf - To-Do List App</title>
+    <meta name="description" content="Advanced To-Do List application with Liquid Glass design">
+    <meta name="theme-color" content="#3498db">
+    <meta name="background-color" content="#1e3c72">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Smurf">
+    <meta name="application-name" content="Smurf">
+    <meta name="msapplication-TileColor" content="#3498db">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Мобильные кнопки меню -->
+    <button class="menu-toggle" id="leftMenuToggle">☰</button>
+    <button class="menu-toggle right" id="rightMenuToggle">⚙️</button>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="app-layout">
+        <!-- Левая панель -->
+        <aside class="sidebar-left">
+            <div class="sidebar-section">
+                <h3>👥 Исполнители</h3>
+                <div id="assigneesList" class="assignees-list"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>🏷️ Быстрые фильтры</h3>
+                <div id="quickFilters" class="quick-filters"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>🚨 Срочные задачи</h3>
+                <div id="urgentTasks" class="urgent-tasks"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>📝 Быстрые заметки</h3>
+                <textarea id="quickNotes" class="quick-notes" placeholder="Быстрые заметки..."></textarea>
+            </div>
+        </aside>
+        
+        <!-- Основной контент -->
+        <main class="main-content">
+            <div class="header">
+                <h1>📋 Smurf To-Do List</h1>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalTasks">0</span>
+                        <span class="stat-label">Всего задач</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="activeTasks">0</span>
+                        <span class="stat-label">Активные</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="completedTasks">0</span>
+                        <span class="stat-label">Выполнено</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="task-input-container">
+                <input type="text" id="taskInput" placeholder="Название задачи...">
+                <select id="priorityInput">
+                    <option value="low">🟢 Низкий</option>
+                    <option value="medium" selected>🟡 Средний</option>
+                    <option value="high">🔴 Высокий</option>
+                </select>
+                <button id="addTaskBtn">➕ Добавить</button>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="active">🔥 Актив</button>
+                <button class="filter-btn" data-filter="all">📋 Все</button>
+                <button class="filter-btn" data-filter="completed">✅ Готово</button>
+                <button class="filter-btn" data-filter="today">📅 Сегодня</button>
+                <button class="filter-btn" data-filter="urgent">🚨 Срочно</button>
+            </div>
+            
+            <div class="task-list" id="taskList"></div>
+            
+            <div class="action-buttons">
+                <button id="clearCompleted">🗑️ Очистить</button>
+                <button id="exportBtn">📤 Экспорт</button>
+                <button id="settingsBtn">⚙️ Настройки</button>
+            </div>
+        </main>
+        
+        <!-- Правая панель -->
+        <aside class="sidebar-right">
+            <div class="sidebar-section">
+                <h3>📊 Статистика</h3>
+                <div id="sidebarStats" class="stats-grid"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>📅 Календарь</h3>
+                <div id="calendarWidget" class="calendar-widget"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>🏆 Достижения</h3>
+                <div id="achievementsList" class="achievements-list"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>⚡ Быстрые действия</h3>
+                <div id="quickActions" class="quick-actions"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>ℹ️ Информация</h3>
+                <div class="info-widget">
+                    <div class="info-item">
+                        <span class="info-label">Статус:</span>
+                        <span class="info-value status-active">🟢 Активен</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Версия:</span>
+                        <span class="info-value">2.0.0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Синхронизация:</span>
+                        <span class="info-value">🔄 Авто</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Модальное окно -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Новая задача</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="modalTaskTitle">Название задачи</label>
+                    <input type="text" id="modalTaskTitle" placeholder="Введите название задачи">
+                </div>
+                
+                <div class="form-group">
+                    <label for="modalTaskDescription">Описание</label>
+                    <textarea id="modalTaskDescription" placeholder="Введите описание задачи"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="modalTaskPriority">Приоритет</label>
+                        <select id="modalTaskPriority">
+                            <option value="low">🟢 Низкий</option>
+                            <option value="medium" selected>🟡 Средний</option>
+                            <option value="high">🔴 Высокий</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modalTaskAssignee">Исполнитель</label>
+                        <input type="text" id="modalTaskAssignee" placeholder="Имя исполнителя">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="modalTaskProject">Проект</label>
+                        <select id="modalTaskProject">
+                            <option value="">Без проекта</option>
+                            <option value="work">Работа</option>
+                            <option value="personal">Личное</option>
+                            <option value="study">Учеба</option>
+                            <option value="health">Здоровье</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modalTaskTags">Теги</label>
+                        <input type="text" id="modalTaskTags" placeholder="тег1, тег2, тег3">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="modalTaskDatetime">Дата и время</label>
+                        <input type="datetime-local" id="modalTaskDatetime">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modalTaskRepeat">Повторять</label>
+                        <select id="modalTaskRepeat">
+                            <option value="">Не повторять</option>
+                            <option value="daily">Ежедневно</option>
+                            <option value="weekly">Еженедельно</option>
+                            <option value="monthly">Ежемесячно</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveTaskBtn">💾 Сохранить</button>
+                <button id="cancelTaskBtn">❌ Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
